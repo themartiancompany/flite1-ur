@@ -57,6 +57,7 @@ _patches=(
   "020-${pkgname}-fix-parallel-builds.patch"
   "030-${pkgname}-respect-destdir.patch"
   "040-${pkgname}-ldflags.patch"
+  "050-${pkgname}-audio-interface.patch"
   "060-${pkgname}-texi.patch"
   "070-${pkgname}-texi2html-to-texi2any-migration.patch"
   "080-${pkgname}-no-rpath.patch"
@@ -81,21 +82,24 @@ sha256sums=(
 
 prepare() {
   local \
-    _patch
+    _patch \
+    _patch_opts=()
   for _patch in "${_patches[@]}"; do
+    _patch_opts=(
+      -Np1
+    )
+    if [[ "${_patch}" == "050-${pkgname}-audio-interface.patch" ]]; then
+      _patch_opts=(
+        -N
+      )
+    fi
     patch \
       -d \
         "${_tarname}-release" \
-    -Np1 \
+    "${_patch_opts[@]}"
     -i \
     "${srcdir}/${_patch}"
   done
-  patch \
-    -d \
-      "${_tarname}-release" \
-    -N \
-    -i \
-    "050-${pkgname}-audio-interface.patch"
 }
 
 build() {
