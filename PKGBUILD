@@ -96,7 +96,7 @@ prepare() {
     patch \
       -d \
         "${_tarname}-release" \
-    "${_patch_opts[@]}"
+    "${_patch_opts[@]}" \
     -i \
     "${srcdir}/${_patch}"
   done
